@@ -144,6 +144,7 @@
       const hasEnd = slots.some((s) => !s.empty && !s.corrupt && s.finished);
       this.items = [
         { label: 'Yeni Oyun', go: () => Game().go(UI.Slots, { mode: 'new' }) },
+        { label: 'Nasıl Oynanır', go: () => Game().go(UI.Howto) },
         { label: 'Devam', disabled: !hasSave, go: () => Game().go(UI.Slots, { mode: 'continue' }) },
         { label: 'Bölümler', disabled: !hasSave, go: () => Game().go(UI.Slots, { mode: 'levels' }) },
         { label: 'Anılar', disabled: !hasEnd, go: () => Game().go(UI.Slots, { mode: 'memories' }) },
@@ -151,7 +152,8 @@
         { label: 'Yedek', go: () => Game().go(UI.Slots, { mode: 'backup' }) },
         { label: 'Jenerik', go: () => Game().go(BB.Final ? BB.Final.Credits : UI.Menu, { back: true }) },
       ];
-      if (hasSave) this.sel = 1;
+      // ilk açılışta rehber seçili gelsin; kayıt varsa "Devam"
+      this.sel = this.items.findIndex((it) => it.label === (hasSave ? 'Devam' : 'Nasıl Oynanır'));
       Audio.play('menu');
       if (Save().warning) UI.toast(Save().warning, 6);
     },
@@ -390,6 +392,155 @@
       Gfx.text(ctx, 'Enter / Boşluk: konuşmayı ilerlet · Esc: duraklat · F: tam ekran · M: ses', W / 2, 200, { color: 'white', align: 'center', outline: 'shadow' });
       Gfx.text(ctx, 'Kanadın yorulursa yere, çiçeğe ya da ortağının başına kon: enerji dolar.', W / 2, 214, { color: 'cream', align: 'center', outline: 'shadow' });
       if (Math.floor(this.t * 2) % 2) Gfx.text(ctx, 'Hazırsanız Enter', W / 2, H - 22, { color: 'honey', align: 'center', outline: 'shadow' });
+    },
+  };
+
+  // ------------------------------------------------------------ nasıl oynanır (sayfa sayfa, hikâye anlatmaz)
+  const HOWTO = [
+    { t: 'Hoş geldiniz', rows: [
+      { i: 'disi_idle', i2: 'erkek_idle', s: 'Bee & Bloom iki kişilik bir oyun: aynı klavyede, yan yana oynanır.' },
+      { p: 'Siz iki küçük arısınız. Kovanın Kraliçesi sizi önemli bir yolculuğa gönderiyor.' },
+      { p: 'Bu yolculuk tek başına bitmez: her bölümde birbirinize ihtiyacınız olacak.' },
+      { p: 'Bu rehber yalnızca nasıl oynanacağını anlatır. Hikâyeden hiçbir şey söylemez; onu oynarken birlikte keşfedin.' },
+      { h: '← → ile sayfaları çevirin.' },
+    ] },
+    { t: 'Tuşlar', keys: true },
+    { t: 'Uçmak', rows: [
+      { k: 'W', k2: '↑', s: 'Basılı tutun: kanat çırparsınız, yükselirsiniz.' },
+      { p: 'Kanat gücü kısa sürer. Arının üstündeki sarı çubuk azaldıkça güç biter.' },
+      { p: 'Güç bitince tuşu basılı tutmaya devam ederseniz süzülürsünüz: yavaşça alçalırsınız. Tuşu bırakırsanız hızla düşersiniz.' },
+      { p: 'Yere, çiçeğe ya da ortağınızın başına konunca güç hemen dolar.' },
+      { h: 'İpucu: uzun boşlukları süzülerek geçin. Çok yüksek yerler için ortağınızdan yardım alın.' },
+    ] },
+    { t: 'Eylem tuşu', rows: [
+      { k: 'S', k2: '↓', s: 'Ne yaptığı, yanınızda ne olduğuna bağlıdır:' },
+      { b: 'Ortağınızın yanındaysanız: onu yakalar, taşırsınız.' },
+      { b: 'Taşırken tekrar basın: bırakırsınız.' },
+      { b: 'Taşırken ← ya da → basılıyken basın: ortağınızı o yöne fırlatırsınız.' },
+      { b: 'Taşırken kanat tuşu basılıyken basın: ortağınızı yukarı fırlatırsınız.' },
+      { b: 'Bir eşyanın yanında: alırsınız; tekrar basınca bırakırsınız.' },
+      { b: 'Konuşabileceğiniz biri yanınızdaysa: konuşursunuz.' },
+      { b: 'Yanınızda hiçbir şey yoksa: ortağınızı çağırırsınız.' },
+    ] },
+    { t: 'Birlikte daha güçlüsünüz', rows: [
+      { b: 'Omuz omuza: ortağınızın başına konun. Alttaki uçarken üstteki de onunla gider; oradan kanat çırpan, tek başına çıkamayacağı kadar yükseğe ulaşır.' },
+      { b: 'Taşıma: taşıyan arı ikinizin kanat gücünü birden kullanır; rüzgâra karşı daha sağlam durursunuz.' },
+      { b: 'Fırlatma: ortağınızı tek başına ulaşamayacağı yere atın.' },
+      { b: 'Biriniz bir yere takılırsa öteki yanına gidip eylem tuşuyla kurtarır.' },
+      { b: 'Birbirinizden çok uzaklaşamazsınız: aranızda görünmez bir bağ vardır, gerilince sizi geri çeker.' },
+    ] },
+    { t: 'Yolda neler var?', rows: [
+      { i: 'honeyflower', s: 'Bal Çiçeği: dokununca açılır. Düşerseniz buradan devam edersiniz.' },
+      { i: 'pollen', s: 'Polen: toplayın; bölüm sonunda sayılır.' },
+      { i: 'rare', s: 'Nadir çiçek: her bölümde iyi saklanmış bir tane vardır.' },
+      { i: 'sign', s: 'Tabela: yanına gelince ipucunu okursunuz.' },
+      { i: 'plate', s: 'Taş plaka: üstünde durunca bir şeyler açılır.' },
+      { i: 'holdflower', s: 'Kapı çiçeği: eylem tuşuyla tutun; bıraktığınızda kapanabilir.' },
+      { i: 'pedestal', s: 'Soru noktası: ikiniz de gelince bir soru sorulur.' },
+      { h: 'Her dünyada yeni şeyler çıkar; tabelalar onları da anlatır.' },
+    ] },
+    { t: 'Sorular', rows: [
+      { p: 'Yolda tanıştığınız dostlar size sorular soracak. Doğru ya da yanlış cevap yoktur: amaç birbirinizi tanımak.' },
+      { b: 'Açık soru: cevabınızın yazdığı çiçeğe uçun.' },
+      { b: 'Gizli soru: sırası gelen kendi tuşlarıyla (Q W E R ya da U I O P) seçer, aynı tuşa bir daha basarak ya da eylem tuşuyla onaylar. Öteki o sırada ekrana bakmasın!' },
+      { b: '"Hanginiz?" sorularında seçenekler sizin isimlerinizdir.' },
+      { b: 'Tahmin sorusu: biri gizlice seçer, öteki onun ne seçtiğini tahmin eder.' },
+      { i: 'jar', s: 'Cevaplar ilk verildiğinde kilitlenir. Her cevap bir bal damlasıdır: sol üstteki kavanoz dolar.' },
+    ] },
+    { t: 'Düşmek ve kayıt', rows: [
+      { p: 'Dikenlere değmek ya da aşağı düşmek sorun değil: can sınırı yoktur, son Bal Çiçeğinden devam edersiniz.' },
+      { k: 'Esc', s: 'Duraklat: devam et, son Bal Çiçeğine dön, bölümü baştan başlat, ayarlar.' },
+      { p: 'Oyun kendiliğinden kaydeder. Ana menüdeki "Devam" kaldığınız yerden başlatır; üç ayrı kayıt yeri vardır.' },
+      { p: '"Ustalık Geçidi" yazan yerler daha zordur; önlerinde mutlaka bir Bal Çiçeği bulunur.' },
+      { h: 'Takıldığınızda: tabelaları okuyun, taşımayı ve fırlatmayı deneyin, etrafa iyi bakın.' },
+    ] },
+    { t: 'Hazır mısınız?', rows: [
+      { i: 'disi_fly', i2: 'erkek_fly', s: 'Birlikte uçun, birbirinizi dinleyin.' },
+      { p: 'Ana menüden "Yeni Oyun"u seçin, isimlerinizi yazın ve arınızı seçin.' },
+      { p: 'Bu rehbere ana menüden istediğiniz zaman dönebilirsiniz.' },
+      { h: 'İyi eğlenceler!' },
+    ] },
+  ];
+
+  UI.Howto = {
+    enter() { this.page = 0; this.anim = 0; this.t = 0; },
+    update(dt) {
+      this.t += dt;
+      this.anim += (this.page - this.anim) * Math.min(1, dt * 12);
+      if (Math.abs(this.page - this.anim) < 0.002) this.anim = this.page;
+      const n = HOWTO.length;
+      if (Input.back()) { Audio.sfx('back'); Game().go(UI.Menu); return; }
+      const conf = Input.confirm(), left = Input.leftNav(), right = Input.rightNav();
+      if (left && this.page > 0) { this.page--; Audio.sfx('page'); }
+      else if ((right || conf) && this.page < n - 1) { this.page++; Audio.sfx('page'); }
+      else if (conf && this.page === n - 1) { Audio.sfx('select'); Game().go(UI.Menu); }
+    },
+    draw(ctx) {
+      UI.drawMenuBg(ctx, 'bahar', 0.45);
+      Gfx.text(ctx, 'Nasıl Oynanır', W / 2, 6, { color: 'honey', align: 'center', scale: 2, outline: 'shadow' });
+      for (let i = 0; i < HOWTO.length; i++) {
+        const x0 = Math.round((i - this.anim) * W);
+        if (x0 <= -W || x0 >= W) continue;
+        this.drawPage(ctx, HOWTO[i], x0);
+      }
+      // sayfa noktaları
+      const n = HOWTO.length, dx = 10, sx = Math.round(W / 2 - (n - 1) * dx / 2);
+      for (let i = 0; i < n; i++) Gfx.rect(ctx, sx + i * dx - (i === this.page ? 2 : 1), H - 31 - (i === this.page ? 1 : 0), i === this.page ? 5 : 3, i === this.page ? 5 : 3, i === this.page ? '#ffd23c' : '#fff4dc');
+      const hint = this.page < n - 1 ? '← → sayfa · Enter ileri · Esc ana menü' : '← geri · Enter ana menü';
+      Gfx.text(ctx, hint, W / 2, H - 20, { color: 'white', align: 'center', outline: 'shadow' });
+    },
+    drawPage(ctx, pg, x0) {
+      const px = x0 + 16, py = 32, pw = W - 32, ph = H - 68;
+      Gfx.panel(ctx, px, py, pw, ph, '#fff4dc', '#3b2516', '#e8d4b0');
+      Gfx.text(ctx, pg.t, px + pw / 2, py + 6, { color: 'honeyD', align: 'center' });
+      Gfx.rect(ctx, px + 12, py + 18, pw - 24, 1, '#e8d4b0');
+      if (pg.keys) { this.drawKeys(ctx, px, py + 22, pw); return; }
+      let y = py + 24;
+      const L = px + 12, wrapW = pw - 24;
+      for (const r of pg.rows) {
+        if (r.p || r.h) {
+          const lines = BB.Font.wrap(r.p || r.h, wrapW);
+          lines.forEach((l, j) => Gfx.text(ctx, l, L, y + j * 11, { color: r.h ? 'honeyD' : 'ink' }));
+          y += lines.length * 11 + 4;
+        } else if (r.b) {
+          const lines = BB.Font.wrap(r.b, wrapW - 10);
+          Gfx.rect(ctx, L + 1, y + 4, 3, 3, '#ffb32c');
+          lines.forEach((l, j) => Gfx.text(ctx, l, L + 10, y + j * 11, { color: 'ink' }));
+          y += lines.length * 11 + 3;
+        } else {
+          // simge(ler) + metin: satır yüksekliği en uzun parçaya göre, hepsi dikeyde ortalı
+          const icons = [r.i, r.i2].filter(Boolean).map((nm) => { const sz = Gfx.sprSize(nm), k = sz.w <= 8 ? 2 : 1; return { nm, k, w: sz.w * k, h: sz.h * k }; });
+          let ix = L;
+          const keyW = (r.k ? BB.Font.measure(r.k) + 8 : 0) + (r.k2 ? BB.Font.measure(r.k2) + 8 : 0);
+          const textX = L + keyW + (icons.length ? icons.length * 20 : 0) + 4;
+          const lines = BB.Font.wrap(r.s, L + wrapW - textX);
+          const rowH = Math.max(13, lines.length * 11 + 2, ...icons.map((c) => c.h));
+          if (r.k) { Gfx.key(ctx, r.k, ix, y + Math.round((rowH - 11) / 2)); ix += BB.Font.measure(r.k) + 8; }
+          if (r.k2) { Gfx.key(ctx, r.k2, ix, y + Math.round((rowH - 11) / 2)); ix += BB.Font.measure(r.k2) + 8; }
+          icons.forEach((c, j) => {
+            const cx = ix + j * 20 + Math.round((18 - c.w) / 2), cy = y + Math.round((rowH - c.h) / 2);
+            if (c.k > 1) Gfx.sprScaled(ctx, c.nm, 0, cx, cy, c.k, j === 1); else Gfx.spr(ctx, c.nm, 0, cx, cy, j === 1);
+          });
+          const ty = y + Math.round((rowH - lines.length * 11) / 2) + 1;
+          lines.forEach((l, j) => Gfx.text(ctx, l, textX, ty + j * 11, { color: 'ink' }));
+          y += rowH + 3;
+        }
+      }
+    },
+    drawKeys(ctx, px, y, pw) {
+      const K = Input.KEYS.p;
+      const cols = [['1. oyuncu', K[0].names, 'pink'], ['2. oyuncu', K[1].names, 'blue']];
+      cols.forEach(([title, k, col], i) => {
+        const x = px + 14 + i * (pw / 2);
+        Gfx.text(ctx, title, x, y + 2, { color: col });
+        const rows = [[k.left + ' ' + k.right, 'yürü'], [k.flap, 'kanat (basılı tut: uç)'], [k.action, 'eylem'], [k.pick.join(' '), 'sorularda gizli seçim']];
+        rows.forEach((r, j) => { Gfx.key(ctx, r[0], x, y + 18 + j * 18); Gfx.text(ctx, r[1], x + BB.Font.measure(r[0]) + 12, y + 18 + j * 18, { color: 'ink' }); });
+      });
+      const yy = y + 96;
+      Gfx.rect(ctx, px + 12, yy - 4, pw - 24, 1, '#e8d4b0');
+      const common = [['Enter', 'konuşmayı ilerlet'], ['Esc', 'duraklat'], ['F', 'tam ekran'], ['M', 'sesi kapat / aç']];
+      common.forEach((r, j) => { const x = px + 14 + (j % 2) * (pw / 2), yk = yy + 4 + Math.floor(j / 2) * 18; Gfx.key(ctx, r[0], x, yk); Gfx.text(ctx, r[1], x + BB.Font.measure(r[0]) + 12, yk, { color: 'ink' }); });
+      Gfx.text(ctx, 'Oyuncular hangi arıyı yöneteceğini oyun başında seçer.', px + pw / 2, yy + 44, { color: 'honeyD', align: 'center' });
     },
   };
 

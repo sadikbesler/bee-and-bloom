@@ -58,8 +58,7 @@ const HOOK = `(function () {
 
   // ---- 1) menüden yeni oyun
   await p.press('Space', 40); await sleep(500);
-  const menuSel = await p.eval('BB.Game.screen === BB.UI.Menu ? BB.UI.Menu.sel : -1');
-  if (menuSel !== 0) { for (let k = 0; k < 6; k++) { await p.press('ArrowUp', 30); await sleep(60); } }
+  await p.eval(`BB.UI.Menu.sel = BB.UI.Menu.items.findIndex((it) => it.label === 'Yeni Oyun')`);
   await sc('t_menu');
   await p.press('Enter', 40); await sleep(400);           // Yeni Oyun → slot seçimi
   await p.press('Enter', 40); await sleep(400);           // 1. slot
@@ -109,7 +108,7 @@ const HOOK = `(function () {
         const before = await p.eval('JSON.stringify({ lv: BB.Save.cur.current.level, un: BB.Save.cur.unlocked, ans: Object.keys(BB.Save.cur.answers).length })');
         await p.send('Page.navigate', { url }); await sleep(1500);          // sekmeyi kapat-aç
         await p.press('Space', 40); await sleep(400);
-        await p.eval('BB.UI.Menu.sel = 1'); await p.press('Enter', 40); await sleep(300);    // Devam
+        await p.eval(`BB.UI.Menu.sel = BB.UI.Menu.items.findIndex((it) => it.label === 'Devam')`); await p.press('Enter', 40); await sleep(300);    // Devam
         await p.eval(HOOK); await p.eval('BB.Test.recs = ' + JSON.stringify(recs) + ';');
         await p.press('Enter', 40); await sleep(800);                               // 1. slot
         const after = await p.eval('JSON.stringify({ lv: BB.Save.cur.current.level, un: BB.Save.cur.unlocked, ans: Object.keys(BB.Save.cur.answers).length, id: BB.Game.Play.def && BB.Game.Play.def.id, names: BB.Game.names })');

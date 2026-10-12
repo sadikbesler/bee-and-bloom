@@ -19,6 +19,10 @@ NASIL AÇILIR
 - Ses, ilk tuşa bastığınızda başlar (tarayıcı kuralı).
 
 ---------------------------------------------------------------------
+İLK KEZ Mİ OYNUYORSUNUZ?
+Ana menüdeki "Nasıl Oynanır" rehberini okuyun (← → ile sayfa çevrilir).
+Rehber hikâyeden hiçbir şey anlatmaz; yalnızca tuşları ve kuralları gösterir.
+
 TUŞLAR
 ---------------------------------------------------------------------
                     1. oyuncu (sol el)     2. oyuncu (sağ el)
