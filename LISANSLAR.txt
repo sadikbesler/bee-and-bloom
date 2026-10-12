@@ -1,0 +1,20 @@
+BEE & BLOOM — LİSANS VE KAYNAKLAR
+=====================================================================
+
+Bu oyunda dışarıdan alınmış hiçbir görsel, ses, müzik ya da yazı tipi
+dosyası YOKTUR. Her şey bu proje için kodla üretilmiştir:
+
+- Grafikler (arılar, karakterler, portreler, karolar, arka planlar,
+  arayüz, Anı Kartı): js/sprites.js, js/characters.js, js/themes.js
+  içindeki piksel haritaları ve kodla çizim. Lisans: projenin kendisi.
+- Yazı tipi: "Bee & Bloom piksel fontu", js/font.js içinde elle çizilmiş
+  glifler (Türkçe ğ ü ş ı İ ö ç dahil). Lisans: projenin kendisi.
+- Müzik: data/muzik.js içinde notalarla yazılmış chiptune döngüleri,
+  WebAudio ile tarayıcıda gerçek zamanlı üretilir. Lisans: projenin kendisi.
+- Ses efektleri: js/audio.js içinde WebAudio sentezi. Lisans: projenin kendisi.
+- Kod: saf HTML5 Canvas + JavaScript; üçüncü taraf kütüphane yok, CDN yok.
+
+İndirilen varlık bulunmadığından ek lisans yükümlülüğü yoktur.
+
+Oyun kişisel kullanım içindir (ticari değil).
+Bee & Bloom · designed by sadixck

@@ -1,0 +1,63 @@
+BEE & BLOOM
+designed by sadixck
+=====================================================================
+
+İki kişilik, aynı bilgisayarda ve aynı klavyede oynanan, hikâyeli, pikselli
+bir kooperatif platform ve bulmaca oyunu. İki arı, sönen Kraliçe Balı'nı
+kurtarmak için dört mevsimi geçer; yol boyunca bekçilerin 40 sorusunu
+yanıtlar. Sonunda cevaplarınız bir Anı Defteri'ne ve indirilebilir bir
+Anı Kartı'na dönüşür.
+
+---------------------------------------------------------------------
+NASIL AÇILIR
+---------------------------------------------------------------------
+- macOS: "Oyna.command" dosyasına çift tıklayın (ilk seferde macOS "açılsın
+  mı" diye sorarsa sağ tık > Aç deyin). Ya da "index.html" dosyasına çift
+  tıklayın; oyun tarayıcıda açılır. İnternet gerekmez.
+- En iyi deneyim: Google Chrome, Safari ya da Firefox'un güncel sürümü.
+- Tam ekran: F tuşu. Sesi kapat/aç: M tuşu.
+- Ses, ilk tuşa bastığınızda başlar (tarayıcı kuralı).
+
+---------------------------------------------------------------------
+TUŞLAR
+---------------------------------------------------------------------
+                    1. oyuncu (sol el)     2. oyuncu (sağ el)
+  Sol / Sağ         A / D                  ← / →
+  Kanat çırp        W                      ↑
+  Eylem             S                      ↓
+  Gizli seçim       Q W E R                U I O P
+
+  Kanat: kısa bas = küçük zıplama, basılı tut = uç/yüksel, bırak = süzül.
+  Kanat enerjisi yere, çiçeğe ya da yerdeki ortağın başına konunca dolar.
+  Eylem: çiçeği basılı tut, eşya al/bırak, ortağını taşı/bırak (taşırken
+  kanat basılıysa yukarı fırlatır), ağa yapışan ortağını kurtar, çağır.
+
+  Enter / Boşluk: konuşmayı ilerlet, seç   ·  Esc: duraklat
+  Tab: sahneyi geç  ·  F: tam ekran  ·  M: ses
+
+---------------------------------------------------------------------
+İPUÇLARI
+---------------------------------------------------------------------
+- Bazı yerlere tek kanat yetmez: biriniz ötekinin başına konsun, alttaki
+  uçsun, üstteki en tepede zıplasın (omuz omuza).
+- Uzun yollarda biriniz ötekini taşısın: taşınanın kanat gücü de kullanılır.
+- Kışta yan yana durun; ayrı kalırsanız donarsınız. Bal-ateşleri ısıtır.
+- Takıldıysanız: Esc > "Son Bal Çiçeğine dön".
+- Gizli sorularda (Q W E R / U I O P), ekranda yazan kişi ekrana bakmasın.
+
+---------------------------------------------------------------------
+KAYIT
+---------------------------------------------------------------------
+- Oyun kendiliğinden kaydeder (her Bal Çiçeği, her soru, bölüm sonu,
+  duraklatma ve sekme kapanırken). 3 kayıt yuvası vardır.
+- Kayıt tarayıcının içinde (localStorage) tutulur: başka tarayıcıda ya da
+  başka bilgisayarda görünmez. Taşımak için ana menü > Yedek > Enter
+  (kaydı .json olarak indir) ve orada I (dosyadan yükle).
+- Cevaplar ilk verildiklerinde kilitlenir; bölümleri tekrar oynasanız da
+  değişmez.
+
+---------------------------------------------------------------------
+GELİŞTİRİCİ İÇİN
+---------------------------------------------------------------------
+Oyunu oynamak için gerekmez. Testler ve araçlar _gelistirme/ klasöründedir
+(Node 22+ gerekir; npm paketi gerekmez). Bkz. _gelistirme/NOTLAR.md.
